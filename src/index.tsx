@@ -40,6 +40,7 @@ import {
 import { renderScene } from "./renderer";
 import { AppState } from "./types";
 import { ExcalidrawElement } from "./element/types";
+import { SceneState } from "./scene/types";
 
 import {
   isWritableElement,
@@ -141,10 +142,18 @@ let lastMouseUp: ((e: any) => void) | null = null;
 
 export function viewportCoordsToSceneCoords(
   { clientX, clientY }: { clientX: number; clientY: number },
-  { scrollX, scrollY }: { scrollX: number; scrollY: number },
+  {
+    scrollX,
+    scrollY,
+    zoom,
+  }: {
+    scrollX: SceneState["scrollX"];
+    scrollY: SceneState["scrollY"];
+    zoom: SceneState["zoom"];
+  },
 ) {
-  const x = clientX - CANVAS_WINDOW_OFFSET_LEFT - scrollX;
-  const y = clientY - CANVAS_WINDOW_OFFSET_TOP - scrollY;
+  const x = (clientX - CANVAS_WINDOW_OFFSET_LEFT - scrollX) / zoom;
+  const y = (clientY - CANVAS_WINDOW_OFFSET_TOP - scrollY) / zoom;
   return { x, y };
 }
 
