@@ -1,5 +1,6 @@
 import { ExcalidrawElement } from "../element/types";
 import { getCommonBounds } from "../element";
+import { SceneState } from "./types";
 
 const SCROLLBAR_MIN_SIZE = 15;
 const SCROLLBAR_MARGIN = 4;
@@ -10,15 +11,22 @@ export function getScrollBars(
   elements: readonly ExcalidrawElement[],
   canvasWidth: number,
   canvasHeight: number,
-  scrollX: number,
-  scrollY: number,
+  {
+    scrollX,
+    scrollY,
+    zoom,
+  }: {
+    scrollX: SceneState["scrollX"];
+    scrollY: SceneState["scrollY"];
+    zoom: SceneState["zoom"];
+  },
 ) {
   let [minX, minY, maxX, maxY] = getCommonBounds(elements);
 
-  minX += scrollX;
-  maxX += scrollX;
-  minY += scrollY;
-  maxY += scrollY;
+  minX = (minX + scrollX) * zoom;
+  maxX = (maxX + scrollX) * zoom;
+  minY = (minY + scrollY) * zoom;
+  maxY = (maxY + scrollY) * zoom;
 
   const leftOverflow = Math.max(-minX, 0);
   const rightOverflow = Math.max(-(canvasWidth - maxX), 0);
@@ -71,16 +79,21 @@ export function isOverScrollBars(
   y: number,
   canvasWidth: number,
   canvasHeight: number,
-  scrollX: number,
-  scrollY: number,
-) {
-  const scrollBars = getScrollBars(
-    elements,
-    canvasWidth,
-    canvasHeight,
+  {
     scrollX,
     scrollY,
-  );
+    zoom,
+  }: {
+    scrollX: SceneState["scrollX"];
+    scrollY: SceneState["scrollY"];
+    zoom: SceneState["zoom"];
+  },
+) {
+  const scrollBars = getScrollBars(elements, canvasWidth, canvasHeight, {
+    scrollX,
+    scrollY,
+    zoom,
+  });
 
   const [isOverHorizontalScrollBar, isOverVerticalScrollBar] = [
     scrollBars.horizontal,
