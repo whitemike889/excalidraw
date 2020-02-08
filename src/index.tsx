@@ -145,15 +145,13 @@ export function viewportCoordsToSceneCoords(
   {
     scrollX,
     scrollY,
-    zoom,
   }: {
     scrollX: SceneState["scrollX"];
     scrollY: SceneState["scrollY"];
-    zoom: SceneState["zoom"];
   },
 ) {
-  const x = (clientX - CANVAS_WINDOW_OFFSET_LEFT - scrollX) / zoom;
-  const y = (clientY - CANVAS_WINDOW_OFFSET_TOP - scrollY) / zoom;
+  const x = clientX - CANVAS_WINDOW_OFFSET_LEFT - scrollX;
+  const y = clientY - CANVAS_WINDOW_OFFSET_TOP - scrollY;
   return { x, y };
 }
 

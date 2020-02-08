@@ -29,3 +29,7 @@ export {
   hasText,
 } from "./comparisons";
 export { createScene } from "./createScene";
+export {
+  getXCoordinateWithSceneState,
+  getYCoordinateWithSceneState,
+} from "./transforms";

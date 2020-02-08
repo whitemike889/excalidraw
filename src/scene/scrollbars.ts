@@ -1,6 +1,10 @@
 import { ExcalidrawElement } from "../element/types";
 import { getCommonBounds } from "../element";
 import { SceneState } from "./types";
+import {
+  getXCoordinateWithSceneState,
+  getYCoordinateWithSceneState,
+} from "./transforms";
 
 const SCROLLBAR_MIN_SIZE = 15;
 const SCROLLBAR_MARGIN = 4;
@@ -23,10 +27,10 @@ export function getScrollBars(
 ) {
   let [minX, minY, maxX, maxY] = getCommonBounds(elements);
 
-  minX = (minX + scrollX) * zoom;
-  maxX = (maxX + scrollX) * zoom;
-  minY = (minY + scrollY) * zoom;
-  maxY = (maxY + scrollY) * zoom;
+  minX = getXCoordinateWithSceneState(minX, { scrollX, zoom });
+  minY = getYCoordinateWithSceneState(minY, { scrollY, zoom });
+  maxX = getXCoordinateWithSceneState(maxX, { scrollX, zoom });
+  maxY = getYCoordinateWithSceneState(maxY, { scrollY, zoom });
 
   const leftOverflow = Math.max(-minX, 0);
   const rightOverflow = Math.max(-(canvasWidth - maxX), 0);
